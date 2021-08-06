@@ -1,0 +1,51 @@
+import { resolveDoH } from "https://raw.githubusercontent.com/heishi1HUMANITY/resolveDoH/main/mod.ts";
+import {
+  assertEquals,
+  assertThrowsAsync,
+} from "https://deno.land/std@0.103.0/testing/asserts.ts";
+
+const domain = "www.example.com";
+const resolver = new URL("https://dns64.dns.google/dns-query");
+
+Deno.test({
+  name: "A record",
+  fn: async (): Promise<void> => {
+    const res = await resolveDoH(resolver, domain);
+    assertEquals(["93.184.216.34"], res.answer);
+  },
+});
+
+Deno.test({
+  name: "AAAA record",
+  fn: async (): Promise<void> => {
+    const res = await resolveDoH(resolver, domain, "AAAA");
+    assertEquals(["2606:2800:220:1:248:1893:25c8:1946"], res.answer);
+  },
+});
+
+Deno.test({
+  name: "TXT record",
+  fn: async (): Promise<void> => {
+    const res = await resolveDoH(resolver, domain, "TXT");
+    assertEquals(["v=spf1 -all"], res.answer);
+  },
+});
+
+Deno.test({
+  name: "CNAME record",
+  fn: async (): Promise<void> => {
+    const res = await resolveDoH(resolver, domain, "CNAME");
+    assertEquals([], res.answer);
+  },
+});
+
+Deno.test({
+  name: "format error",
+  fn: async (): Promise<void> => {
+    await assertThrowsAsync(
+      async () => await resolveDoH(resolver, "hoge"),
+      Error,
+      "Format Error - The name server was unable to interpret th query.",
+    );
+  },
+});
