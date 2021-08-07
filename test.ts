@@ -5,7 +5,7 @@ import {
 } from "https://deno.land/std@0.103.0/testing/asserts.ts";
 
 const domain = "www.example.com";
-const server = new URL("https://dns64.dns.google/dns-query");
+const server = new URL("https://doh.opendns.com/dns-query");
 
 Deno.test({
   name: "A record",
