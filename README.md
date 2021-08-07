@@ -1,5 +1,8 @@
 # resolveDoH
 
+[![deno doc](https://doc.deno.land/badge.svg)](https://doc.deno.land/https/raw.githubusercontent.com%2Fheishi1HUMANITY%2FresolveDoH%2Fmain%2Fmod.ts)
+
+
 resolveDoH resolves domain name by "DNS Queries over HTTPS"
 ([RFC 8484](https://www.rfc-editor.org/info/rfc8484)).
 
