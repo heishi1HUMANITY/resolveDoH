@@ -5,14 +5,36 @@ export interface DoHResponse {
 }
 
 /**
+ * resolveDoH resolved domain name by "DNS Queries over HTTPS" (RFC 8484).
+ * You need to prepare DoH server (e.g. Google Public DNS, OpenDNS).
  *
- * @param {URL} resolver
+ * A record:
+ *
+ * ```
+ * import { resolveDoH } from "https://raw.githubusercontent.com/heishi1HUMANITY/resolveDoH/main/mod.ts";
+ *
+ * const DoHServer = new URL("https://dns.google/dns-query");
+ * const records = await resolveDoH(DoHServer, "example.com");
+ * console.log(records.answer); // => [ "93.184.216.34" ]
+ * ```
+ *
+ * Another records:
+ *
+ * ```
+ * import { resolveDoH } from "https://raw.githubusercontent.com/heishi1HUMANITY/resolveDoH/main/mod.ts";
+ *
+ * const DoHServer = new URL("https://dns.google/dns-query");
+ * const records = await resolveDoH(DoHServer, "example.com", "AAAA");
+ * console.log(records.answer); // => ["2606:2800:220:1:248:1893:25c8:1946" ]
+ * ```
+ *
+ * @param {URL} server
  * @param {string} query
  * @param {"A" | "CNAME" | "TXT" | "AAAA" | undefined} recordType
- * @returns {DoHResponse}
+ * @returns {Promise<DoHResponse>}
  */
 export async function resolveDoH(
-  resolver: URL,
+  server: URL,
   query: string,
   recordType?: "A" | "CNAME" | "TXT" | "AAAA",
 ): Promise<DoHResponse> {
@@ -46,7 +68,7 @@ export async function resolveDoH(
     ...queryQuestion,
   ]);
 
-  const f: Response = await fetch(resolver, {
+  const f: Response = await fetch(server, {
     method: "POST",
     headers: {
       "accept": "application/dns-message",
