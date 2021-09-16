@@ -1,4 +1,4 @@
-import { resolveDoH } from "https://raw.githubusercontent.com/heishi1HUMANITY/resolveDoH/main/mod.ts";
+import { resolveDoH } from "https://deno.land/x/resolvedoh/mod.ts";
 import {
   assertEquals,
   assertThrowsAsync,

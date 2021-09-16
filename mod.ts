@@ -11,7 +11,7 @@ export interface DoHResponse {
  * A record:
  *
  * ```
- * import { resolveDoH } from "https://raw.githubusercontent.com/heishi1HUMANITY/resolveDoH/main/mod.ts";
+ * import { resolveDoH } from "https://deno.land/x/resolvedoh/mod.ts";
  *
  * const DoHServer = new URL("https://dns.google/dns-query");
  * const records = await resolveDoH(DoHServer, "example.com");
@@ -21,7 +21,7 @@ export interface DoHResponse {
  * Another records:
  *
  * ```
- * import { resolveDoH } from "https://raw.githubusercontent.com/heishi1HUMANITY/resolveDoH/main/mod.ts";
+ * import { resolveDoH } from "https://deno.land/x/resolvedoh/mod.ts";
  *
  * const DoHServer = new URL("https://dns.google/dns-query");
  * const records = await resolveDoH(DoHServer, "example.com", "AAAA");
