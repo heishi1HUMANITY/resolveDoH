@@ -1,4 +1,4 @@
-import { resolveDoH } from "https://deno.land/x/resolvedoh/mod.ts";
+import { resolveDoH } from "./mod.ts";
 import {
   assertEquals,
   assertThrowsAsync,
@@ -45,7 +45,7 @@ Deno.test({
     await assertThrowsAsync(
       async () => await resolveDoH(server, "hoge"),
       Error,
-      "Format Error - The name server was unable to interpret th query.",
+      "Name Error - Meaningful only for responses from an authoritative name server, this code signifies that the domain name referenced in the query does not exist.",
     );
   },
 });
