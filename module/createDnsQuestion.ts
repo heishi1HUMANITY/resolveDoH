@@ -1,6 +1,6 @@
 "use strict";
 export function createDnsQuestion(
-  recordType: "A" | "CNAME" | "TXT" | "AAAA",
+  recordType: "A" | "CNAME" | "MX" | "TXT" | "AAAA",
   url: string,
 ): Uint8Array {
   let queryType: number;
@@ -10,6 +10,9 @@ export function createDnsQuestion(
       break;
     case "CNAME":
       queryType = 5;
+      break;
+    case "MX":
+      queryType = 15;
       break;
     case "TXT":
       queryType = 16;

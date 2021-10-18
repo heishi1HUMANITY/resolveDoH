@@ -36,13 +36,13 @@ export interface DoHResponse {
  *
  * @param {URL} server
  * @param {string} query
- * @param {"A" | "CNAME" | "TXT" | "AAAA" | undefined} recordType
+ * @param {"A" | "CNAME" | "TXT" | "MX" | "AAAA" | undefined} recordType
  * @returns {Promise<DoHResponse>}
  */
 export async function resolveDoH(
   server: URL,
   query: string,
-  recordType?: "A" | "CNAME" | "TXT" | "AAAA",
+  recordType?: "A" | "CNAME" | "MX" | "TXT" | "AAAA",
 ): Promise<DoHResponse> {
   recordType ??= "A";
   const dnsRequest: Uint8Array = createDnsQuestion(recordType, query);
@@ -114,6 +114,46 @@ export async function resolveDoH(
         res.answer.push(cname);
         break;
       }
+      case 15: {
+        const preference = parseInt(
+          ans.RDATA[0].toString(2).padStart(8, "0") +
+            ans.RDATA[1].toString(2).padStart(8, "0"),
+          2,
+        );
+        let exchange = "";
+        let pointer = 2;
+        while (true) {
+          if ((ans.RDATA[pointer] & 0b11000000) === 0b11000000) {
+            const decompressed: Uint8Array = compressedMessageParser(
+              answer,
+              parseInt(
+                (ans.RDATA[pointer++] & 0b00111111).toString(2).padStart(
+                  8,
+                  "0",
+                ) +
+                  ans.RDATA[pointer++].toString(2).padStart(8, "0"),
+                2,
+              ),
+            );
+            for (let i = 0; i < decompressed.length; i++) {
+              const len = decompressed[i++];
+              if (len === 0) break;
+              exchange +=
+                new TextDecoder().decode(decompressed.slice(i, i + len)) + ".";
+              i += len - 1;
+            }
+            break;
+          }
+          const len: number = ans.RDATA[pointer++];
+          if (len === 0) break;
+          exchange +=
+            new TextDecoder().decode(ans.RDATA.slice(pointer, pointer + len)) +
+            ".";
+          pointer += len;
+        }
+        res.answer.push(`${preference} ${exchange}`);
+        break;
+      }
       case 16: {
         res.answer.push(new TextDecoder().decode(ans.RDATA.slice(1)));
         break;
@@ -149,6 +189,7 @@ export async function resolveDoH(
           ipv6.splice(tmp[0][0], tmp[0][1], "");
         }
         res.answer.push(ipv6.join(":"));
+        break;
       }
     }
   });

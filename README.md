@@ -11,6 +11,7 @@ resolveDoH resolves domain name by "DNS Queries over HTTPS"
 - A
 - AAAA
 - CNAME
+- MX
 - TXT
 
 ## Usage
