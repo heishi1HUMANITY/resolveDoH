@@ -22,20 +22,27 @@ Deno.test({
     assertEquals(["2606:2800:220:1:248:1893:25c8:1946"], res.answer);
   },
 });
+Deno.test({
+  name: "CNAME record",
+  fn: async (): Promise<void> => {
+    const res = await resolveDoH(server, domain, "CNAME");
+    assertEquals([], res.answer);
+  },
+});
+
+Deno.test({
+  name: "MX record",
+  fn: async (): Promise<void> => {
+    const res = await resolveDoH(server, "example.com", "MX");
+    assertEquals(["0 "], res.answer);
+  },
+});
 
 Deno.test({
   name: "TXT record",
   fn: async (): Promise<void> => {
     const res = await resolveDoH(server, domain, "TXT");
     assertEquals(["v=spf1 -all"], res.answer);
-  },
-});
-
-Deno.test({
-  name: "CNAME record",
-  fn: async (): Promise<void> => {
-    const res = await resolveDoH(server, domain, "CNAME");
-    assertEquals([], res.answer);
   },
 });
 

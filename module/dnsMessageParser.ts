@@ -2,8 +2,11 @@
 import { DnsHeader, dnsHeaderParser } from "./dnsHeaderParser.ts";
 import { dnsQuestionParser, Question } from "./dnsQuestionParser.ts";
 import { Answer, dnsAnswerParser } from "./dnsAnswerParser.ts";
-import { Authority, dnsAuthorityParser } from './dnsAuthorityParser.ts';
-import { AdditionalInformation, dnsAdditionalInformationParser } from './dnsAdditionalInformationParser.ts';
+import { Authority, dnsAuthorityParser } from "./dnsAuthorityParser.ts";
+import {
+  AdditionalInformation,
+  dnsAdditionalInformationParser,
+} from "./dnsAdditionalInformationParser.ts";
 export interface DnsMessage {
   header: DnsHeader;
   question: Question[];
@@ -59,7 +62,7 @@ export function dnsMessageParser(raw: Uint8Array): DnsMessage {
     }
     const len: number = parseInt(
       atmp[atmp.length - 2].toString(2).padStart(8, "0") +
-      atmp[atmp.length - 1].toString(2).padStart(8, "0"),
+        atmp[atmp.length - 1].toString(2).padStart(8, "0"),
       2,
     );
     for (let j = 0; j < len; j++) {
@@ -88,9 +91,9 @@ export function dnsMessageParser(raw: Uint8Array): DnsMessage {
       ntmp.push(raw[pointer++]);
     }
     const len: number = parseInt(
-      ntmp[ntmp.length - 2].toString(2).padStart(8, '0') +
-      ntmp[ntmp.length - 1].toString(2).padStart(8, '0'),
-      2
+      ntmp[ntmp.length - 2].toString(2).padStart(8, "0") +
+        ntmp[ntmp.length - 1].toString(2).padStart(8, "0"),
+      2,
     );
     for (let j = 0; j < len; j++) {
       ntmp.push(raw[pointer++]);
@@ -118,14 +121,16 @@ export function dnsMessageParser(raw: Uint8Array): DnsMessage {
       artmp.push(raw[pointer++]);
     }
     const len: number = parseInt(
-      artmp[artmp.length - 2].toString(2).padStart(8, '0') +
-      artmp[artmp.length - 1].toString(2).padStart(8, '0'),
-      2
+      artmp[artmp.length - 2].toString(2).padStart(8, "0") +
+        artmp[artmp.length - 1].toString(2).padStart(8, "0"),
+      2,
     );
     for (let j = 0; j < len; j++) {
       artmp.push(raw[pointer++]);
     }
-    message.additionalInformation.push(dnsAdditionalInformationParser(raw, new Uint8Array(artmp)));
+    message.additionalInformation.push(
+      dnsAdditionalInformationParser(raw, new Uint8Array(artmp)),
+    );
   }
 
   return message;

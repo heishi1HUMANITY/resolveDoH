@@ -14,7 +14,6 @@ export function dnsAnswerParser(
 ): Answer {
   const ANSWER = {} as Answer;
   let pointer = 0;
-  ANSWER.NAME = "";
   while (true) {
     if ((a[pointer] & 0b11000000) === 0b11000000) {
       const decompressed: Uint8Array = compressedMessageParser(

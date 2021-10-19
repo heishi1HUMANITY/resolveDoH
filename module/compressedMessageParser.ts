@@ -11,8 +11,8 @@ export function compressedMessageParser(
         ...compressedMessageParser(
           raw,
           parseInt(
-            (raw[pointer] & 0b00111111).toString(2).padStart(8, "0") +
-              raw[++pointer].toString(2).padStart(8, "0"),
+            (raw[pointer++] & 0b00111111).toString(2).padStart(8, "0") +
+              raw[pointer++].toString(2).padStart(8, "0"),
             2,
           ),
         ),

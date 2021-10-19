@@ -11,6 +11,7 @@ resolveDoH resolves domain name by "DNS Queries over HTTPS"
 - A
 - AAAA
 - CNAME
+- PTR
 - MX
 - TXT
 
@@ -33,9 +34,9 @@ console.log(records.answer); // => [ "93.184.216.34" ]
 ### Another records
 
 ```typescript
-import { resolveDoH } from "https://deno.land/x/resolvedoh@0.0.2/mod.ts";
+import { resolveDoH } from "https://deno.land/x/resolvedoh/mod.ts";
 
 const DoHServer = new URL("https://dns.google/dns-query");
 const records = await resolveDoH(DoHServer, "example.com", "AAAA");
-console.log(records.answer); // => ["2606:2800:220:1:248:1893:25c8:1946" ]
+console.log(records.answer); // => [ "2606:2800:220:1:248:1893:25c8:1946" ]
 ```
