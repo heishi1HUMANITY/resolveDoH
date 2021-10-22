@@ -17,7 +17,7 @@ export function compressedMessageParser(
           ),
         ),
       );
-      continue;
+      break;
     }
     const len = raw[pointer++];
     res.push(len);
